@@ -1,0 +1,147 @@
+.landing-bg {
+  min-height: 100vh;
+  min-width: 100vw;
+  background: #181c24;
+  position: relative;
+}
+
+.landing-header {
+  position: absolute;
+  top: 2.5rem;
+  left: 2.5rem;
+  z-index: 10;
+}
+
+.landing-logo {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #6ee7b7;
+  letter-spacing: 1px;
+  font-family: 'Arial Rounded MT Bold', Arial, sans-serif;
+  background: none;
+  box-shadow: none;
+}
+
+@media (max-width: 600px) {
+  .landing-header {
+    top: 1.2rem;
+    left: 1.2rem;
+  }
+  .landing-logo {
+    font-size: 1.3rem;
+  }
+}
+
+.landing-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100vw;
+  padding: 0 1.5rem;
+  box-sizing: border-box;
+}
+
+.main-headline {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #e0e7ef;
+  text-align: center;
+  margin-bottom: 1.2rem;
+  margin-top: 4.5rem;
+  letter-spacing: 0.5px;
+  line-height: 1.1;
+}
+
+.main-highlight {
+  color: #6ee7b7;
+}
+
+.main-subhead {
+  color: #b6c2d6;
+  font-size: 1.25rem;
+  text-align: center;
+  margin-bottom: 2.5rem;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.main-features-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2.2rem 2.5rem;
+  margin-bottom: 3.2rem;
+  width: 100%;
+  max-width: 900px;
+  justify-content: center;
+}
+
+@media (max-width: 900px) {
+  .main-features-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem 1.2rem;
+  }
+}
+@media (max-width: 600px) {
+  .main-features-grid {
+    grid-template-columns: 1fr;
+    gap: 1.1rem 0;
+  }
+}
+
+.main-feature-block {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.1rem;
+  background: rgba(35, 40, 58, 0.85);
+  border-radius: 14px;
+  padding: 1.2rem 1.1rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  min-width: 0;
+}
+
+.main-feature-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+.main-feature-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.main-feature-title {
+  font-size: 1.15rem;
+  font-weight: bold;
+  color: #e0e7ef;
+  margin-bottom: 0.1rem;
+}
+
+.main-feature-desc {
+  font-size: 1rem;
+  color: #b6c2d6;
+  font-weight: 500;
+}
+
+.main-cta {
+  background: linear-gradient(90deg, #6ee7b7 0%, #3b82f6 100%);
+  color: #181c24;
+  font-weight: bold;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 10px;
+  padding: 1.1rem 2.8rem;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background 0.2s;
+  box-sizing: border-box;
+  box-shadow: 0 2px 12px rgba(62, 232, 183, 0.08);
+}
+.main-cta:hover {
+  background: linear-gradient(90deg, #3b82f6 0%, #6ee7b7 100%);
+} 
