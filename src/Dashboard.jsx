@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./Dashboard.css";
+import { OPENAI_API_KEY, APP_CONFIG } from "./config";
+
 
 // API Configuration - Replace with your actual API key
 // API key is now loaded from environment variables via config.js
 
-const APP_CONFIG = {
-  maxTokens: 500,
-  temperature: 0.7,
-  model: 'gpt-3.5-turbo'
-};
+
 
 const navLinks = [
   { id: 'Dashboard', label: 'Dashboard' },
@@ -83,14 +81,14 @@ const Dashboard = ({ email }) => {
   const [reduceClutter, setReduceClutter] = useState(false);
   const [brightness, setBrightness] = useState(100);
   const [selectedStarter, setSelectedStarter] = useState("");
-  
+ 
   // Enhanced sensory controls for inclusive learning
   const [selectedFont, setSelectedFont] = useState('default');
   const [colorFilter, setColorFilter] = useState('none');
   const [layoutMode, setLayoutMode] = useState('standard');
   const [highContrast, setHighContrast] = useState(false);
   const [fontSize, setFontSize] = useState(16);
-  
+ 
   // Note Taker states
   const [notes, setNotes] = useState([]);
   const [currentNote, setCurrentNote] = useState('');
@@ -105,7 +103,7 @@ const Dashboard = ({ email }) => {
   const [noteTheme, setNoteTheme] = useState('dark');
   const [lineSpacing, setLineSpacing] = useState(1.5);
   const [recognition, setRecognition] = useState(null);
-  
+ 
   // AI Study Buddy states
   const [chatMessages, setChatMessages] = useState([
     {
@@ -198,7 +196,7 @@ const Dashboard = ({ email }) => {
   // Apply accessibility settings to document
   useEffect(() => {
     const root = document.documentElement;
-    
+   
     // Apply font family
     if (selectedFont === 'opendyslexic') {
       root.style.setProperty('--main-font', 'OpenDyslexic, Arial, sans-serif');
@@ -215,13 +213,13 @@ const Dashboard = ({ email }) => {
     } else {
       root.style.setProperty('--main-font', 'system-ui, -apple-system, sans-serif');
     }
-    
+   
     // Apply font size - ensure it's applied to the root element
     root.style.setProperty('--font-size-base', `${fontSize}px`);
-    
+   
     // Also apply to body for immediate effect
     document.body.style.fontSize = `${fontSize}px`;
-    
+   
     // Apply color filters
     if (colorFilter === 'highcontrast') {
       root.style.setProperty('--color-filter', 'contrast(200%) brightness(150%)');
@@ -234,17 +232,17 @@ const Dashboard = ({ email }) => {
     } else {
       root.style.setProperty('--color-filter', 'none');
     }
-    
+   
     // Apply high contrast mode
     if (highContrast) {
       root.setAttribute('data-high-contrast', 'true');
     } else {
       root.removeAttribute('data-high-contrast');
     }
-    
+   
     // Apply layout mode
     root.setAttribute('data-layout-mode', layoutMode);
-    
+   
     // Debug logging
     console.log('Accessibility settings updated:', {
       font: selectedFont,
@@ -253,7 +251,7 @@ const Dashboard = ({ email }) => {
       highContrast: highContrast,
       layoutMode: layoutMode
     });
-    
+   
   }, [selectedFont, fontSize, colorFilter, highContrast, layoutMode]);
 
   // Cleanup speech recognition on unmount
@@ -420,7 +418,7 @@ const Dashboard = ({ email }) => {
   // Note Taker functions
   const saveNote = () => {
     if (!noteTitle.trim() || !currentNote.trim()) return;
-    
+   
     const newNote = {
       id: selectedNote ? selectedNote.id : Date.now(),
       title: noteTitle,
@@ -501,22 +499,22 @@ const Dashboard = ({ email }) => {
       const recognitionInstance = new SpeechRecognition();
       recognitionInstance.continuous = true;
       recognitionInstance.interimResults = true;
-      
+     
       recognitionInstance.onstart = () => {
         setIsRecording(true);
         console.log('Recording started');
       };
-      
+     
       recognitionInstance.onend = () => {
         setIsRecording(false);
         console.log('Recording stopped');
       };
-      
+     
       recognitionInstance.onerror = (event) => {
         console.error('Speech recognition error:', event.error);
         setIsRecording(false);
       };
-      
+     
       recognitionInstance.onresult = (event) => {
         let finalTranscript = '';
         for (let i = event.resultIndex; i < event.results.length; i++) {
@@ -528,7 +526,7 @@ const Dashboard = ({ email }) => {
           setCurrentNote(prev => prev + ' ' + finalTranscript);
         }
       };
-      
+     
       try {
         recognitionInstance.start();
         setRecognition(recognitionInstance);
@@ -605,7 +603,7 @@ const Dashboard = ({ email }) => {
       }
 
       const data = await response.json();
-      
+     
       const aiMessage = {
         id: Date.now() + 1,
         type: 'ai',
@@ -616,7 +614,7 @@ const Dashboard = ({ email }) => {
       setChatMessages(prev => [...prev, aiMessage]);
     } catch (error) {
       console.error('Error sending message:', error);
-      
+     
       // Fallback response if API fails
       const fallbackMessage = {
         id: Date.now() + 1,
@@ -624,7 +622,7 @@ const Dashboard = ({ email }) => {
         content: `I'm having trouble connecting right now: ${error.message}. Please check your API key and try again.`,
         timestamp: new Date().toISOString()
       };
-      
+     
       setChatMessages(prev => [...prev, fallbackMessage]);
     } finally {
       setIsLoading(false);
@@ -671,7 +669,7 @@ const Dashboard = ({ email }) => {
         .map(note => `Title: ${note.title}\nContent: ${note.content}\nTags: ${note.tags.join(', ')}\n---`)
         .join('\n\n');
 
-      const summaryPrompt = summaryType === 'key-points' 
+      const summaryPrompt = summaryType === 'key-points'
         ? 'Extract the key points and main ideas from these notes. Focus on the most important concepts and findings.'
         : summaryType === 'concepts'
         ? 'Identify and explain the main concepts and themes from these notes. Group related ideas together.'
@@ -769,8 +767,8 @@ const Dashboard = ({ email }) => {
         </section>
         <div className="dash-stat-row">
           {statCards.map((card, i) => (
-            <div 
-              className={`dash-stat-card ${card.isButton ? 'dash-stat-card-button' : ''}`} 
+            <div
+              className={`dash-stat-card ${card.isButton ? 'dash-stat-card-button' : ''}`}
               key={i}
               onClick={card.onClick}
               style={{ cursor: card.onClick ? 'pointer' : 'default' }}
@@ -892,7 +890,7 @@ const Dashboard = ({ email }) => {
   const renderInclusiveLearning = () => (
     <>
       <h2 className="dash-heading">Inclusive Learning Design</h2>
-      
+     
       <div className="dash-inclusive-container">
         {/* Font Settings */}
         <div className="dash-inclusive-card">
@@ -900,7 +898,7 @@ const Dashboard = ({ email }) => {
             <h3>Typography & Reading</h3>
             <p>Customize fonts and text settings for better readability</p>
           </div>
-          
+         
           <div className="dash-inclusive-section">
             <h4>Dyslexia-Friendly Fonts</h4>
             <select
@@ -942,7 +940,7 @@ const Dashboard = ({ email }) => {
             <h3>Visual Accessibility</h3>
             <p>Adjust colors and contrast for better visual processing</p>
           </div>
-          
+         
           <div className="dash-inclusive-section">
             <h4>Color Filters</h4>
             <select
@@ -957,11 +955,11 @@ const Dashboard = ({ email }) => {
               ))}
             </select>
             <div className="dash-color-preview">
-              <div className="dash-color-sample" style={{ 
-                background: colorFilter === 'highcontrast' ? '#000000' : 
-                           colorFilter === 'colorblind' ? '#ff6b6b' : 
-                           colorFilter === 'sepia' ? '#f4d03f' : 
-                           colorFilter === 'night' ? '#2c3e50' : '#6ee7b7' 
+              <div className="dash-color-sample" style={{
+                background: colorFilter === 'highcontrast' ? '#000000' :
+                           colorFilter === 'colorblind' ? '#ff6b6b' :
+                           colorFilter === 'sepia' ? '#f4d03f' :
+                           colorFilter === 'night' ? '#2c3e50' : '#6ee7b7'
               }}>
                 Color Sample
               </div>
@@ -989,7 +987,7 @@ const Dashboard = ({ email }) => {
             <h3>Layout & Spacing</h3>
             <p>Customize the interface layout for your learning preferences</p>
           </div>
-          
+         
           <div className="dash-inclusive-section">
             <h4>Layout Options</h4>
             <select
@@ -1018,7 +1016,7 @@ const Dashboard = ({ email }) => {
           <div className="dash-inclusive-section">
             <h4>Quick Presets</h4>
             <div className="dash-preset-buttons">
-              <button 
+              <button
                 className="dash-preset-btn"
                 onClick={() => {
                   setSelectedFont('opendyslexic');
@@ -1030,7 +1028,7 @@ const Dashboard = ({ email }) => {
               >
                 Dyslexia-Friendly
               </button>
-              <button 
+              <button
                 className="dash-preset-btn"
                 onClick={() => {
                   setSelectedFont('arial');
@@ -1042,7 +1040,7 @@ const Dashboard = ({ email }) => {
               >
                 High Contrast
               </button>
-              <button 
+              <button
                 className="dash-preset-btn"
                 onClick={() => {
                   setSelectedFont('comicsans');
@@ -1071,36 +1069,36 @@ const Dashboard = ({ email }) => {
               <h3>Self-Paced Focus Tools</h3>
               <p>Tools like Pomodoro timers and distraction-free modes allow users to tailor their environment for maximum personal effectiveness — supporting lifelong and self-directed learning.</p>
             </div>
-            
+           
             <div className="dash-timer-modes">
-              <button 
+              <button
                 className={`dash-timer-mode-btn${timerMode === 'pomodoro' ? ' active' : ''}`}
                 onClick={() => switchMode('pomodoro')}
               >
                 Focus (25min)
               </button>
-              <button 
+              <button
                 className={`dash-timer-mode-btn${timerMode === 'shortBreak' ? ' active' : ''}`}
                 onClick={() => switchMode('shortBreak')}
               >
                 Short Break (5min)
               </button>
-              <button 
+              <button
                 className={`dash-timer-mode-btn${timerMode === 'longBreak' ? ' active' : ''}`}
                 onClick={() => switchMode('longBreak')}
               >
                 Long Break (15min)
               </button>
             </div>
-            
+           
             <div className="dash-timer-display">
               <div className="dash-timer-time">{formatTime(timeLeft)}</div>
               <div className="dash-timer-status">
-                {timerMode === 'pomodoro' ? 'Focus Time' : 
+                {timerMode === 'pomodoro' ? 'Focus Time' :
                  timerMode === 'shortBreak' ? 'Short Break' : 'Long Break'}
               </div>
             </div>
-            
+           
             <div className="dash-timer-controls">
               {!isRunning ? (
                 <button className="dash-timer-start-btn" onClick={startTimer}>
@@ -1115,7 +1113,7 @@ const Dashboard = ({ email }) => {
                 Reset
               </button>
             </div>
-            
+           
             <div className="dash-timer-stats">
               <div className="dash-timer-stat">
                 <div className="dash-timer-stat-label">Completed Sessions</div>
@@ -1128,14 +1126,14 @@ const Dashboard = ({ email }) => {
             </div>
           </div>
         </div>
-        
+       
         <div className="dash-distraction-sidebar">
           <div className="dash-distraction-card">
             <div className="dash-distraction-header">
               <h4>Distraction-Free Mode</h4>
               <p>Create a focused environment for deep work and learning</p>
             </div>
-            
+           
             <div className="dash-distraction-controls">
               <div className="dash-distraction-toggle">
                 <span>Enable Distraction-Free Mode</span>
@@ -1147,7 +1145,7 @@ const Dashboard = ({ email }) => {
                 </button>
               </div>
             </div>
-            
+           
             {distractionFree && (
               <div className="dash-distraction-features">
                 <div className="dash-distraction-feature">Browser notifications disabled</div>
@@ -1170,7 +1168,7 @@ const Dashboard = ({ email }) => {
         <div className="dash-notetaker-sidebar">
           <div className="dash-notetaker-header">
             <h3>My Notes</h3>
-            <button 
+            <button
               className="dash-new-note-btn"
               onClick={() => {
                 setSelectedNote(null);
@@ -1182,7 +1180,7 @@ const Dashboard = ({ email }) => {
               + New Note
             </button>
           </div>
-          
+         
           <div className="dash-search-section">
             <input
               type="text"
@@ -1191,7 +1189,7 @@ const Dashboard = ({ email }) => {
               onChange={(e) => setSearchQuery(e.target.value)}
               className="dash-search-input"
             />
-            
+           
             <select
               value={selectedTag}
               onChange={(e) => setSelectedTag(e.target.value)}
@@ -1203,10 +1201,10 @@ const Dashboard = ({ email }) => {
               ))}
             </select>
           </div>
-          
+         
           <div className="dash-notes-list">
             {filteredNotes.map(note => (
-              <div 
+              <div
                 key={note.id}
                 className={`dash-note-item${selectedNote?.id === note.id ? ' active' : ''}`}
                 onClick={() => selectNote(note)}
@@ -1214,7 +1212,7 @@ const Dashboard = ({ email }) => {
                 <div className="dash-note-item-header">
                   <h4>{note.title}</h4>
                   <div className="dash-note-actions">
-                    <button 
+                    <button
                       className="dash-read-note-btn"
                       onClick={(e) => {
                         e.stopPropagation();
@@ -1224,7 +1222,7 @@ const Dashboard = ({ email }) => {
                     >
                       🔊
                     </button>
-                    <button 
+                    <button
                       className="dash-delete-note-btn"
                       onClick={(e) => {
                         e.stopPropagation();
@@ -1239,7 +1237,7 @@ const Dashboard = ({ email }) => {
                 <p>{note.content.substring(0, 100)}...</p>
                 <div className="dash-note-tags">
                   {note.tags.map(tag => (
-                    <span 
+                    <span
                       key={tag}
                       className="dash-note-tag"
                       style={{ backgroundColor: tagOptions.find(t => t.value === tag)?.color }}
@@ -1253,7 +1251,7 @@ const Dashboard = ({ email }) => {
             ))}
           </div>
         </div>
-        
+       
         {/* Main Editor Area */}
         <div className="dash-notetaker-main">
           <div className="dash-editor-header">
@@ -1264,33 +1262,33 @@ const Dashboard = ({ email }) => {
               onChange={(e) => setNoteTitle(e.target.value)}
               className="dash-note-title-input"
             />
-            
+           
             <div className="dash-editor-controls">
-              <button 
+              <button
                 className="dash-save-note-btn"
                 onClick={saveNote}
                 disabled={!noteTitle.trim() || !currentNote.trim()}
               >
                 Save
               </button>
-              
-              <button 
+             
+              <button
                 className={`dash-audio-btn${isSpeaking ? ' active' : ''}`}
                 onClick={() => speakText(currentNote)}
                 disabled={!currentNote.trim()}
               >
                 {isSpeaking ? 'Stop' : 'Read'}
               </button>
-              
+             
               {!isRecording ? (
-                <button 
+                <button
                   className="dash-record-btn"
                   onClick={startRecording}
                 >
                   Start Recording
                 </button>
               ) : (
-                <button 
+                <button
                   className="dash-stop-record-btn"
                   onClick={stopRecording}
                 >
@@ -1299,7 +1297,7 @@ const Dashboard = ({ email }) => {
               )}
             </div>
           </div>
-          
+         
           <div className="dash-editor-toolbar">
             <div className="dash-toolbar-section">
               <span>Font:</span>
@@ -1313,7 +1311,7 @@ const Dashboard = ({ email }) => {
                 ))}
               </select>
             </div>
-            
+           
             <div className="dash-toolbar-section">
               <span>Theme:</span>
               <select
@@ -1326,7 +1324,7 @@ const Dashboard = ({ email }) => {
                 ))}
               </select>
             </div>
-            
+           
             <div className="dash-toolbar-section">
               <span>Line Spacing:</span>
               <input
@@ -1341,7 +1339,7 @@ const Dashboard = ({ email }) => {
               <span>{lineSpacing}x</span>
             </div>
           </div>
-          
+         
           <div className="dash-editor-content">
             <textarea
               placeholder="Start writing your note here... Use # for headings, • for bullet points, and add emojis for visual organization!"
@@ -1365,12 +1363,12 @@ const Dashboard = ({ email }) => {
               }}
             />
           </div>
-          
+         
           <div className="dash-tags-section">
             <h4>Tags:</h4>
             <div className="dash-tags-container">
               {noteTags.map(tag => (
-                <span 
+                <span
                   key={tag}
                   className="dash-note-tag"
                   style={{ backgroundColor: tagOptions.find(t => t.value === tag)?.color }}
@@ -1380,7 +1378,7 @@ const Dashboard = ({ email }) => {
                 </span>
               ))}
             </div>
-            
+           
             <div className="dash-add-tags">
               {tagOptions.map(tag => (
                 <button
@@ -1406,7 +1404,7 @@ const Dashboard = ({ email }) => {
       <div className="dash-studybuddy-container">
         <div className="dash-chat-header">
           <h3>AI Learning Assistant</h3>
-          <button 
+          <button
             className="dash-clear-chat-btn"
             onClick={clearChat}
             title="Clear conversation"
@@ -1414,10 +1412,10 @@ const Dashboard = ({ email }) => {
             Clear Chat
           </button>
         </div>
-        
+       
         <div className="dash-chat-messages">
           {chatMessages.map(message => (
-            <div 
+            <div
               key={message.id}
               className={`dash-message ${message.type === 'user' ? 'user' : 'ai'}`}
             >
@@ -1430,14 +1428,14 @@ const Dashboard = ({ email }) => {
                 </div>
               </div>
               <div className="dash-message-time">
-                {new Date(message.timestamp).toLocaleTimeString([], { 
-                  hour: '2-digit', 
-                  minute: '2-digit' 
+                {new Date(message.timestamp).toLocaleTimeString([], {
+                  hour: '2-digit',
+                  minute: '2-digit'
                 })}
               </div>
             </div>
           ))}
-          
+         
           {isLoading && (
             <div className="dash-message ai">
               <div className="dash-message-content">
@@ -1453,7 +1451,7 @@ const Dashboard = ({ email }) => {
             </div>
           )}
         </div>
-        
+       
         <div className="dash-chat-input">
           <textarea
             value={userInput}
@@ -1463,7 +1461,7 @@ const Dashboard = ({ email }) => {
             className="dash-message-input"
             rows="3"
           />
-          <button 
+          <button
             className="dash-send-btn"
             onClick={sendMessage}
             disabled={!userInput.trim() || isLoading}
@@ -1530,15 +1528,15 @@ const Dashboard = ({ email }) => {
               <div className="dash-breathing-circle">
                 <div className={`dash-breathing-animation ${breathingPhase}`}>
                                   <div className="dash-breathing-text">
-                  {isBreakRunning 
+                  {isBreakRunning
                     ? (breathingPhase === 'inhale' ? 'Breathe In' : 'Breathe Out')
                     : 'Click Start Break to begin breathing exercise'
                   }
                 </div>
                                   <div className="dash-breathing-waves">
                   {isBreakRunning && [...Array(8)].map((_, i) => (
-                    <div 
-                      key={i} 
+                    <div
+                      key={i}
                       className={`dash-wave dash-wave-${i + 1}`}
                       style={{
                         animationDelay: `${i * 0.1}s`,
@@ -1578,7 +1576,7 @@ const Dashboard = ({ email }) => {
               <option value="concepts">Main Concepts</option>
               <option value="action-items">Action Items</option>
             </select>
-            <button 
+            <button
               className="dash-generate-summary-btn"
               onClick={generateSummary}
               disabled={selectedNotesForSummary.length === 0 || isSummarizing}
@@ -1587,7 +1585,7 @@ const Dashboard = ({ email }) => {
             </button>
           </div>
         </div>
-        
+       
         <div className="dash-summarizer-content">
           {/* Left Side - Note Selection */}
           <div className="dash-notes-selection">
@@ -1596,7 +1594,7 @@ const Dashboard = ({ email }) => {
               {notes.map(note => {
                 const isSelected = selectedNotesForSummary.find(n => n.id === note.id);
                 return (
-                  <div 
+                  <div
                     key={note.id}
                     className={`dash-note-card ${isSelected ? 'selected' : ''}`}
                     onClick={() => toggleNoteForSummary(note)}
@@ -1605,7 +1603,7 @@ const Dashboard = ({ email }) => {
                       <h5>{note.title}</h5>
                       <div className="dash-note-card-tags">
                         {note.tags.map(tag => (
-                          <span 
+                          <span
                             key={tag}
                             className="dash-note-tag"
                             style={{ backgroundColor: tagOptions.find(t => t.value === tag)?.color }}
@@ -1627,7 +1625,7 @@ const Dashboard = ({ email }) => {
               })}
             </div>
           </div>
-          
+         
           {/* Right Side - Summaries */}
           <div className="dash-summaries-section">
             <h4>Generated Summaries</h4>
@@ -1642,14 +1640,14 @@ const Dashboard = ({ email }) => {
                     <div className="dash-summary-header">
                       <h5>{summary.title}</h5>
                       <div className="dash-summary-actions">
-                        <button 
+                        <button
                           className="dash-read-summary-btn"
                           onClick={() => speakSummary(summary)}
                           title="Read summary aloud"
                         >
                           🔊
                         </button>
-                        <button 
+                        <button
                           className="dash-delete-summary-btn"
                           onClick={() => deleteSummary(summary.id)}
                           title="Delete summary"
@@ -1687,8 +1685,8 @@ const Dashboard = ({ email }) => {
         <div className="dash-logo">LearnInColor</div>
         <nav className="dash-nav">
           {navLinks.map((link, i) => (
-            <div 
-              key={i} 
+            <div
+              key={i}
               className={`dash-nav-link${activeTab === link.id ? " active" : ""}`}
               onClick={() => setActiveTab(link.id)}
             >
@@ -1710,12 +1708,12 @@ const Dashboard = ({ email }) => {
       </aside>
       <main className="dash-main">
         <div className="dash-main-inner">
-          {activeTab === 'Dashboard' ? renderDashboard() : 
-           activeTab === 'Study Timer' ? renderStudyTimer() : 
-           activeTab === 'Note Taker' ? renderNoteTaker() : 
-           activeTab === 'Study Buddy' ? renderStudyBuddy() : 
-           activeTab === 'AI Summarizer' ? renderAISummarizer() : 
-           activeTab === 'Take a Break' ? renderTakeABreak() : 
+          {activeTab === 'Dashboard' ? renderDashboard() :
+           activeTab === 'Study Timer' ? renderStudyTimer() :
+           activeTab === 'Note Taker' ? renderNoteTaker() :
+           activeTab === 'Study Buddy' ? renderStudyBuddy() :
+           activeTab === 'AI Summarizer' ? renderAISummarizer() :
+           activeTab === 'Take a Break' ? renderTakeABreak() :
            renderInclusiveLearning()}
         </div>
       </main>
