@@ -6,10 +6,11 @@ A comprehensive, accessible learning platform designed to support diverse learni
 ![React](https://img.shields.io/badge/React-18.0+-61dafb?logo=react)
 ![Vite](https://img.shields.io/badge/Vite-5.0+-646cff?logo=vite)
 ![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4-412991?logo=openai)
+Vercel Link (Try it out!)- https://learnincolor-jet.vercel.app/ 
 
 
 
-## 🙏 Acknowledgments
+##  Acknowledgments
 
 - OpenAI for providing the AI API Key
 - The inclusive design community for inspiration
