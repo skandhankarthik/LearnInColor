@@ -8,6 +8,9 @@ A comprehensive, accessible learning platform designed to support diverse learni
 ![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4-412991?logo=openai)
 
 
+Vercel Link (Try it out!): https://learn-in-color-jet.vercel.app/ 
+
+
 
 
 ##  Acknowledgments
